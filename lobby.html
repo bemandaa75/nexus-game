@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Escape - Lobby</title>
+    <link rel="stylesheet" href="lobby.css">
+</head>
+
+<body>
+
+    <div class="lobby-dark-overlay"></div>
+
+    <div id="setup-modal" class="setup-container">
+        <div class="setup-box">
+            <h2 class="setup-title">PENGATURAN PROFIL</h2>
+            <p class="setup-subtitle">Masukkan namamu dan pilih avatar untuk memulai</p>
+
+            <input type="text" id="input-name" class="name-input" placeholder="Masukkan Nama (Maks 10 huruf)"
+                autocomplete="off" maxlength="10">
+
+            <div class="avatar-grid">
+                <div class="avatar-card selected" onclick="selectAvatar(1)">
+                    <div class="avatar-header">
+                        <img src="image/avt1.png" class="avatar-icon">
+                        <span>Avatar 1</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+                <div class="avatar-card" onclick="selectAvatar(2)">
+                    <div class="avatar-header">
+                        <img src="image/avt2.png" class="avatar-icon">
+                        <span>Avatar 2</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+                <div class="avatar-card" onclick="selectAvatar(3)">
+                    <div class="avatar-header">
+                        <img src="image/avt3.png" class="avatar-icon">
+                        <span>Avatar 3</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+                <div class="avatar-card" onclick="selectAvatar(4)">
+                    <div class="avatar-header">
+                        <img src="image/avt4.png" class="avatar-icon">
+                        <span>Avatar 4</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+                <div class="avatar-card" onclick="selectAvatar(5)">
+                    <div class="avatar-header">
+                        <img src="image/avt5.png" class="avatar-icon">
+                        <span>Avatar 5</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+                <div class="avatar-card" onclick="selectAvatar(6)">
+                    <div class="avatar-header">
+                        <img src="image/avt6.png" class="avatar-icon">
+                        <span>Avatar 6</span>
+                    </div>
+                    <div class="avatar-placeholder"></div>
+                </div>
+            </div>
+
+            <button class="btn-start" onclick="saveProfile()">MASUK LOBBY</button>
+        </div>
+    </div>
+
+    <div id="main-lobby" class="lobby-container hidden">
+        <div class="lobby-window">
+            <div class="lobby-color-overlay"></div>
+
+            <header class="lobby-header">
+                <div class="header-left">
+                    <div class="stat-settings" onclick="openSettings()" title="Settings">
+                        <span class="stat-icon">⚙️</span>
+                    </div>
+                    <div class="header-stats">
+                        <div class="stat-badge">
+                            <span class="stat-icon">⭐</span>
+                            <span class="stat-value" id="display-stars">0</span>
+                        </div>
+                        <div class="stat-badge">
+                            <span class="stat-icon">🗝️</span>
+                            <span class="stat-value" id="display-diamonds">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <div class="profile-info">
+                        <div class="player-name" id="display-player-name">Player01</div>
+                    </div>
+                    <img id="header-avatar" src="avt1.png" alt="Player Avatar" class="header-avatar-img">
+                </div>
+            </header>
+
+            <div class="map-area">
+                <img src="image/kar.png" alt="Kar Robot" class="lobby-robot">
+
+                <div class="map-row">
+                    <div class="node unlocked cyan" onclick="goToRoom('binary')">
+                        <div class="icon"><img src="image/terbuka.png" class="node-img-icon" alt="Terbuka"></div>
+                        <div class="node-name">BINARY</div>
+                    </div>
+                    <div class="arrow-right"></div>
+                    <div class="node locked cyan" onclick="goToRoom('decimal')">
+                        <div class="icon"><img src="image/terkunci.png" class="node-img-icon" alt="Terkunci"></div>
+                        <div class="node-name">DECIMAL</div>
+                    </div>
+                    <div class="arrow-right"></div>
+                    <div class="node locked cyan" onclick="goToRoom('octal')">
+                        <div class="icon"><img src="image/terkunci.png" class="node-img-icon" alt="Terkunci"></div>
+                        <div class="node-name">OCTAL</div>
+                    </div>
+                </div>
+
+                <div class="s-connector">
+                    <div class="arrow-down-left"></div>
+                </div>
+
+                <div class="map-row">
+                    <div class="node locked orange" onclick="goToRoom('hexa')">
+                        <div class="icon"><img src="image/terkunci.png" class="node-img-icon" alt="Terkunci"></div>
+                        <div class="node-name">HEXA</div>
+                    </div>
+                    <div class="arrow-right"></div>
+                    <div class="node locked purple" onclick="goToRoom('logic')">
+                        <div class="icon"><img src="image/terkunci.png" class="node-img-icon" alt="Terkunci"></div>
+                        <div class="node-name">LOGIC GATE</div>
+                    </div>
+                    <div class="arrow-right"></div>
+                    <div class="node locked dark" onclick="goToRoom('master')">
+                        <div class="icon"><img src="image/terkuncinyamaster.png" class="node-img-icon" alt="Terkunci">
+                        </div>
+                        <div class="node-name">MASTER CORE</div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="lobby-footer">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-bar-fill" style="width: 0%;"></div>
+                    </div>
+                    <span class="progress-text">PROGRESS LAB: <span id="progress-bar-text">0%</span></span>
+                </div>
+                <div class="footer-desc">Peta Laboratorium<br>Pilih room untuk dimainkan</div>
+            </footer>
+
+            <!-- Tombol Reset digantikan ikon ⚙️ di header -->
+        </div>
+    </div>
+
+    <script src="lobby.js"></script>
+
+    <!-- Cinematic Transition Overlay -->
+    <div id="page-transition" class="page-transition"></div>
+
+    <!-- Modal Overlay -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+
+        <!-- Settings Modal -->
+        <div id="modal-settings" class="modal-box box-settings">
+            <div class="settings-header">
+                <h2 class="modal-title text-purple">⚙ SETTINGS</h2>
+                <button class="settings-close" onclick="closeSettings()">✕</button>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🎵 Background Music</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-music" onclick="toggleMusic()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-music" min="0" max="100" value="40"
+                            oninput="setMusicVolume(this.value)" class="vol-slider">
+                        <span class="vol-value" id="vol-music-val">40</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🔔 Efek Suara</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-sfx" onclick="toggleSfx()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-sfx" min="0" max="100" value="70" oninput="setSfxVolume(this.value)"
+                            class="vol-slider">
+                        <span class="vol-value" id="vol-sfx-val">70</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🔄 Reset Progress</div>
+                <button class="restart-btn" onclick="resetProgress()">🔄 RESTART GAME</button>
+            </div>
+
+            <button class="modal-btn modal-btn-purple mt-20" onclick="closeSettings()">SIMPAN & TUTUP</button>
+        </div>
+
+        <!-- Reset Confirm -->
+        <div id="modal-reset" class="modal-box box-reset hidden">
+            <div class="reset-icon">🔄</div>
+            <p class="reset-title">RESET PROGRESS?</p>
+            <p class="reset-desc">Semua room akan terkunci kembali.</p>
+            <div class="reset-actions">
+                <button class="reset-btn-confirm" onclick="confirmReset()">YA, RESET</button>
+                <button class="reset-btn-cancel" onclick="cancelReset()">BATAL</button>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

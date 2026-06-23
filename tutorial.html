@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEXUS — How to Play</title>
+    <link rel="stylesheet" href="tutorial.css" />
+</head>
+
+<body>
+    <div id="bg-layer"></div>
+    <canvas id="particles"></canvas>
+    <div id="scanlines"></div>
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+    <div id="t-overlay"></div>
+
+    <div id="page-wrap">
+
+        <!-- Panel utama -->
+        <div id="tut-panel">
+            <h2 id="tut-heading">CARA BERMAIN</h2>
+
+            <!-- 4 Cards + panah -->
+            <div id="cards-row">
+
+                <div class="flow-arrow">&#9658;</div>
+
+                <!-- Card 1 -->
+                <div class="tut-card active" onclick="setActive(0)">
+                    <div class="card-icon-wrap ci-purple">
+                        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="8" y="12" width="14" height="11" rx="2.5" fill="none" stroke="#d8aaff"
+                                stroke-width="2" />
+                            <rect x="8" y="27" width="14" height="11" rx="2.5" fill="none" stroke="#d8aaff"
+                                stroke-width="2" />
+                            <line x1="15" y1="23" x2="15" y2="27" stroke="#d8aaff" stroke-width="2" />
+                            <rect x="28" y="18" width="16" height="16" rx="2.5" fill="none" stroke="#d8aaff"
+                                stroke-width="2" />
+                            <line x1="24" y1="26" x2="28" y2="26" stroke="#d8aaff" stroke-width="2" />
+                        </svg>
+                    </div>
+                    <p class="card-lbl">Jawab<br />puzzle</p>
+                    <p class="card-desc">Baca soal konversi bilangan, lalu ketik jawaban di kolom yang tersedia dan
+                        tekan SUBMIT.</p>
+                </div>
+
+                <div class="flow-arrow">&#9658;</div>
+
+                <!-- Card 2 -->
+                <div class="tut-card" onclick="setActive(1)">
+                    <div class="card-icon-wrap ci-dark">
+                        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="26" cy="26" r="13" fill="none" stroke="#90aabf" stroke-width="2" />
+                            <circle cx="26" cy="26" r="6" fill="none" stroke="#90aabf" stroke-width="1.8" />
+                            <rect x="24" y="9" width="4" height="4" rx="1" fill="#90aabf" />
+                            <rect x="24" y="39" width="4" height="4" rx="1" fill="#90aabf" />
+                            <rect x="9" y="24" width="4" height="4" rx="1" fill="#90aabf" />
+                            <rect x="39" y="24" width="4" height="4" rx="1" fill="#90aabf" />
+                            <text x="26" y="24" font-family="monospace" font-size="4" fill="#90aabf"
+                                text-anchor="middle">01101</text>
+                            <text x="26" y="30" font-family="monospace" font-size="4" fill="#90aabf"
+                                text-anchor="middle">10011</text>
+                        </svg>
+                    </div>
+                    <p class="card-lbl">Kumpulkan<br />kode</p>
+                    <p class="card-desc">Setiap jawaban benar menghasilkan Digital Key. Kumpulkan semua kunci dari 6
+                        room!</p>
+                </div>
+
+                <div class="flow-arrow">&#9658;</div>
+
+                <!-- Card 3 -->
+                <div class="tut-card" onclick="setActive(2)">
+                    <div class="card-icon-wrap ci-dark">
+                        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="15" y="26" width="22" height="17" rx="3.5" fill="none" stroke="#90aabf"
+                                stroke-width="2" />
+                            <path d="M19 26V21Q26 11 33 21V26" fill="none" stroke="#90aabf" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                            <circle cx="26" cy="35" r="3" fill="#90aabf" />
+                            <line x1="26" y1="38" x2="26" y2="41" stroke="#90aabf" stroke-width="2"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <p class="card-lbl">Unlock room<br />berikutnya</p>
+                    <p class="card-desc">Digital Key membuka pintu room berikutnya. Selesaikan semua room secara
+                        berurutan!</p>
+                </div>
+
+                <div class="flow-arrow">&#9658;</div>
+
+                <!-- Card 4 -->
+                <div class="tut-card" onclick="setActive(3)">
+                    <div class="card-icon-wrap ci-cyan">
+                        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M26 10C19 10 13 16 13 23C13 28 16 31.5 20 33.5L20 40L32 40L32 33.5C36 31.5 39 28 39 23C39 16 33 10 26 10Z"
+                                fill="none" stroke="#4ecfff" stroke-width="2" stroke-linejoin="round" />
+                            <line x1="20" y1="42" x2="32" y2="42" stroke="#4ecfff" stroke-width="2"
+                                stroke-linecap="round" />
+                            <line x1="22" y1="45" x2="30" y2="45" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                            <text x="26" y="28" font-family="monospace" font-size="9" fill="#4ecfff"
+                                text-anchor="middle" font-weight="bold">?</text>
+                            <line x1="26" y1="4" x2="26" y2="7" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                            <line x1="41" y1="10" x2="39" y2="12" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                            <line x1="11" y1="10" x2="13" y2="12" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                            <line x1="46" y1="23" x2="43" y2="23" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                            <line x1="6" y1="23" x2="9" y2="23" stroke="#4ecfff" stroke-width="1.6"
+                                stroke-linecap="round" />
+                        </svg>
+                    </div>
+                    <p class="card-lbl">Gunakan hint<br />jika perlu</p>
+                    <p class="card-desc">Setiap room punya 3 hint gratis. Gunakan bijak — skor lebih tinggi tanpa hint!
+                    </p>
+                </div>
+
+                <div class="flow-arrow">&#9658;</div>
+
+            </div><!-- /cards-row -->
+
+            <!-- Bottom: robot besar + bar + tombol -->
+            <div id="bottom-row">
+
+                <!-- Robot BESAR pojok kiri -->
+                <div id="robot-wrap">
+                    <img src="image/kar.png" id="robot-img" alt="Robot" />
+                </div>
+
+                <!-- Bar + buttons -->
+                <div id="bar-section">
+
+                    <!-- Loading bar — sama persis splash screen -->
+                    <div id="bar-wrap">
+                        <div id="bar-track">
+                            <div id="bar-fill"></div>
+                        </div>
+                        <span id="bar-pct">0%</span>
+                    </div>
+                    <p id="bar-label">READY TO START... (SYSTEMS OPTIMAL)</p>
+
+                    <!-- Tombol: BACK dan START GAME (tidak ada NEXT) -->
+                    <div id="btn-row">
+                        <button id="btnBack">BACK</button>
+                        <button id="btnStart" class="btn-start">&#9658; START GAME</button>
+                    </div>
+
+                </div>
+            </div><!-- /bottom-row -->
+
+        </div><!-- /tut-panel -->
+
+        <p id="caption">Swipe tutorial (4 card) &nbsp;·&nbsp; Pelajari cara bermain</p>
+
+    </div><!-- /page-wrap -->
+
+    <script src="tutorial.js"></script>
+</body>
+
+</html>

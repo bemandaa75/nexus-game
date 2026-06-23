@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXUS – Escape Logic Lab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+
+  <div id="splash">  
+    <div id="bg-layer"></div>
+    <canvas id="particles"></canvas>
+    <div id="scanlines"></div>
+
+    <!-- sudut HUD -->
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+
+    <div id="content">
+
+      <!-- ══ JUDUL ══ -->
+      <div id="title-wrap">
+        <h1 id="title-nexus" data-text="NEXUS">NEXUS</h1>
+        <p id="title-sub">ESCAPE LOGIC LAB</p>
+      </div>
+
+      <!-- ══ ROBOT ══ -->
+      <div id="robot-wrap">
+        <div id="robot-halo"></div>
+        <img id="robot-img" src="image/kar.png" alt="NEXUS Robot" />
+        <div id="robot-platform"></div>
+      </div>
+
+      <!-- ══ LOADING ══ -->
+      <div id="loading-section">
+
+        <div class="bar-row">
+          <div class="bar-track">
+            <!-- segmen grid -->
+            <div class="bar-segments"></div>
+            <!-- fill -->
+            <div id="bar-fill">
+              <div id="bar-shine"></div>
+            </div>
+          </div>
+          <span id="percent-label">0%</span>
+        </div>
+
+        <div id="status-line">
+          <span id="loading-text">LOADING DATA PACKS...</span>
+          <span id="system-text">SYSTEM STATUS: OPTIMAL</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html> 

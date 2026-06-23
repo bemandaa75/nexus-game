@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Escape Logic Lab - MASTER CORE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="master.css">
+    <style>
+        /* ── OPENING ─────────────────────────────────────────── */
+        .opening-screen {
+            position: fixed;
+            inset: 0;
+            z-index: 50000;
+            background: #000 url('image/bg6.jpeg') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease;
+        }
+
+        .opening-screen.hide {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .opening-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.62);
+            z-index: 0;
+        }
+
+        .opening-scan {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0, 0, 0, 0.05) 3px, rgba(0, 0, 0, 0.05) 4px);
+        }
+
+        .opening-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 2;
+            pointer-events: none;
+            background: radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
+        }
+
+        .opening-content {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: min(560px, 88vw);
+            padding: 40px 44px;
+            background: rgba(0, 0, 0, 0.55);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 16px;
+            backdrop-filter: blur(8px);
+            gap: 0;
+        }
+
+        .op-warning {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 5px;
+            color: rgba(245, 158, 11, 0.5);
+            margin-bottom: 16px;
+            opacity: 0;
+            animation: opFadeIn 0.6s ease 0.3s forwards;
+        }
+
+        .op-title {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(36px, 6vw, 64px);
+            font-weight: 700;
+            letter-spacing: 8px;
+            line-height: 0.95;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+            opacity: 0;
+            margin-bottom: 6px;
+            animation: opSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.7s forwards;
+        }
+
+        .op-subtitle {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 10px;
+            letter-spacing: 6px;
+            color: rgba(245, 158, 11, 0.45);
+            opacity: 0;
+            margin-bottom: 24px;
+            animation: opFadeIn 0.5s ease 1.3s forwards;
+        }
+
+        .op-line {
+            width: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.5), transparent);
+            margin-bottom: 22px;
+            animation: opLine 0.8s ease 1.6s forwards;
+        }
+
+        @keyframes opLine {
+            to {
+                width: 100%;
+            }
+        }
+
+        .op-narasi {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(13px, 1.2vw, 15px);
+            color: rgba(226, 232, 240, 0.72);
+            line-height: 1.75;
+            letter-spacing: 0.2px;
+            opacity: 0;
+            margin-bottom: 22px;
+            animation: opFadeIn 0.7s ease 2s forwards;
+        }
+
+        .op-narasi .hl {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        .op-narasi .hl-red {
+            color: #f87171;
+            font-weight: 700;
+        }
+
+        .op-narasi .hl-cyan {
+            color: #67e8f9;
+        }
+
+        .op-stats {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 24px;
+            opacity: 0;
+            animation: opFadeIn 0.5s ease 2.6s forwards;
+        }
+
+        .op-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            background: rgba(245, 158, 11, 0.06);
+            border: 1px solid rgba(245, 158, 11, 0.18);
+            border-radius: 8px;
+            padding: 8px 14px;
+            flex: 1;
+        }
+
+        .op-stat-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(14px, 1.8vw, 20px);
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .op-stat-lbl {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 8px;
+            letter-spacing: 1px;
+            color: rgba(245, 158, 11, 0.4);
+        }
+
+        .op-btn {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(13px, 1.4vw, 16px);
+            font-weight: 700;
+            letter-spacing: 4px;
+            padding: 12px 40px;
+            border: 1px solid rgba(245, 158, 11, 0.6);
+            background: rgba(245, 158, 11, 0.08);
+            color: #f59e0b;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            opacity: 0;
+            animation: opFadeIn 0.5s ease 3s forwards;
+            width: 100%;
+        }
+
+        .op-btn:hover {
+            background: rgba(245, 158, 11, 0.16);
+            border-color: #f59e0b;
+            box-shadow: 0 0 24px rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes opFadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes opSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ── QUESTION TYPE BADGE ─────────────────────────────── */
+        .question-type-badge {
+            display: inline-block;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: clamp(10px, 1vw, 13px);
+            letter-spacing: 3px;
+            padding: 5px 14px;
+            border-radius: 6px;
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+            margin-bottom: 12px;
+            transition: all 0.3s;
+        }
+
+        /* ── CORE METER ──────────────────────────────────────── */
+        .core-meter {
+            margin-top: 24px;
+        }
+
+        .core-meter-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            color: rgba(245, 158, 11, 0.6);
+            margin-bottom: 8px;
+        }
+
+        .core-bar-wrap {
+            width: 100%;
+            height: 6px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            overflow: hidden;
+        }
+
+        .core-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #ef4444);
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+            transition: width 0.5s ease;
+            border-radius: 4px;
+        }
+
+        .core-bar-pct {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            color: rgba(245, 158, 11, 0.6);
+            text-align: right;
+            margin-top: 4px;
+        }
+
+        /* ── VICTORY BURST ───────────────────────────────────── */
+        .victory-burst {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: radial-gradient(circle at center, rgba(245, 158, 11, 0.18) 0%, transparent 65%);
+            border-radius: inherit;
+        }
+
+        .victory-badge {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(14px, 1.5vw, 18px);
+            font-weight: 700;
+            letter-spacing: 3px;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+            padding: 6px 20px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            display: inline-block;
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+        }
+
+        .final-score-box {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-radius: 12px;
+            padding: 16px 32px;
+            margin: 16px 0;
+        }
+
+        .final-score-label {
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 3px;
+            color: rgba(245, 158, 11, 0.6);
+            margin-bottom: 6px;
+        }
+
+        .final-score-val {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: clamp(28px, 3.5vw, 44px);
+            font-weight: 700;
+            color: #f59e0b;
+            text-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+        }
+
+        .text-gold {
+            color: #f59e0b !important;
+            text-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+        }
+
+        .modal-btn-gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #0f172a;
+            border: none;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .modal-btn-gold:hover {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            box-shadow: 0 0 36px rgba(245, 158, 11, 0.7);
+            transform: scale(1.02);
+        }
+
+        .box-transition {
+            border-color: #f59e0b;
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box-usekey {
+            border-color: #f59e0b;
+            box-shadow: 0 0 60px rgba(245, 158, 11, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="game-container">
+        <header>
+            <div class="lives" id="lives-display"></div>
+            <div class="stats">
+                <div class="stat-item"><span class="stat-icon">⏱️</span><span id="timer">20:00</span></div>
+                <div class="stat-item"><span class="stat-icon">⭐</span><span id="score">0</span></div>
+                <div class="stat-item"><span class="stat-icon">📋</span><span id="question-counter">1/20</span></div>
+            </div>
+            <div class="header-actions">
+                <button title="Restart" onclick="restartGame()">↻</button>
+                <button title="Settings" onclick="openSettings()">⚙</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="dialog-box">
+                    <div class="dialog-title">NEXUS CORE:</div>
+                    <div class="dialog-text" id="nexus-dialog">MASTER CORE aktif. Semua sistem terkunci. Selesaikan
+                        tantangan akhir untuk membebaskan lab.</div>
+                </div>
+                <img src="image/rbtbinary.png" alt="Nexus Robot" class="robot-img">
+            </div>
+
+            <div class="center-panel">
+                <div class="question-type-badge" id="question-type-badge">BINARY</div>
+                <div class="question" id="question-display"></div>
+                <div class="answer-box" id="answer-display">_Jawaban di sini</div>
+                <div class="hint-display" id="hint-display"></div>
+                <div class="numpad" id="numpad">
+                    <button onclick="inputNumber('0')">0</button>
+                    <button onclick="inputNumber('1')">1</button>
+                    <button onclick="inputNumber('2')">2</button>
+                    <button onclick="inputNumber('3')">3</button>
+                    <button onclick="inputNumber('4')">4</button>
+                    <button onclick="inputNumber('5')">5</button>
+                    <button onclick="inputNumber('6')">6</button>
+                    <button onclick="inputNumber('7')">7</button>
+                    <button onclick="inputNumber('8')">8</button>
+                    <button onclick="inputNumber('9')">9</button>
+                    <button onclick="inputNumber('A')">A</button>
+                    <button onclick="inputNumber('B')">B</button>
+                    <button onclick="inputNumber('C')">C</button>
+                    <button onclick="inputNumber('D')">D</button>
+                    <button onclick="inputNumber('F')">F</button>
+
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <button class="action-btn btn-submit" onclick="checkAnswer()">SUBMIT</button>
+                <button class="action-btn btn-hint" id="hint-btn" onclick="useHint()">HINT (<span
+                        id="hint-count">3</span>)</button>
+                <button class="action-btn btn-secondary" onclick="backspaceAnswer()">⌫ BACKSPACE</button>
+                <div class="core-meter">
+                    <div class="core-meter-label">CORE POWER</div>
+                    <div class="core-bar-wrap">
+                        <div class="core-bar-fill" id="core-bar-fill" style="width:0%"></div>
+                    </div>
+                    <div class="core-bar-pct" id="core-bar-pct">0%</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ========== OPENING CINEMATIC ========== -->
+    <div id="opening-screen" class="opening-screen">
+        <div class="opening-scan"></div>
+        <div class="opening-vignette"></div>
+        <div class="opening-content">
+            <div class="op-warning">⚠ &nbsp; CLASSIFIED — LEVEL 6 CLEARANCE REQUIRED &nbsp; ⚠</div>
+            <div class="op-title">MASTER CORE</div>
+            <div class="op-subtitle">FINAL PROTOCOL · NEXUS ESCAPE LOGIC LAB</div>
+            <div class="op-line"></div>
+            <p class="op-narasi">
+                Kamu telah melewati <span class="hl">Binary</span>, <span class="hl">Decimal</span>,
+                <span class="hl">Octal</span>, <span class="hl">Hexadecimal</span>, dan <span class="hl">Logic
+                    Gate</span>.<br>
+                Kini hanya satu penghalang tersisa — <span class="hl-red">MASTER CORE</span>.<br><br>
+                Sistem ini mengunci seluruh laboratorium sejak <span class="hl-cyan">2045</span>.<br>
+                Tidak ada yang pernah berhasil menembusnya.<br>
+                Sampai hari ini.
+            </p>
+            <div class="op-stats">
+                <div class="op-stat">
+                    <div class="op-stat-val">20</div>
+                    <div class="op-stat-lbl">SOAL</div>
+                </div>
+                <div class="op-stat">
+                    <div class="op-stat-val">20:00</div>
+                    <div class="op-stat-lbl">WAKTU</div>
+                </div>
+                <div class="op-stat">
+                    <div class="op-stat-val">5</div>
+                    <div class="op-stat-lbl">TIPE SOAL</div>
+                </div>
+                <div class="op-stat">
+                    <div class="op-stat-val">3</div>
+                    <div class="op-stat-lbl">HINT</div>
+                </div>
+            </div>
+            <button class="op-btn" onclick="startGame()">▶ &nbsp; MULAI TANTANGAN AKHIR</button>
+        </div>
+    </div>
+
+    <!-- ========== MODALS ========== -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+
+        <div id="modal-success" class="modal-compact box-success hidden">
+            <div class="modal-label text-gold">BERHASIL</div>
+            <div class="modal-row">
+                <div class="modal-row-text">
+                    <p class="modal-desc">Luar biasa!<br>Core Power meningkat!</p>
+                    <div class="score-gain" id="score-gain-text">+200 poin</div>
+                    <button class="modal-btn modal-btn-gold" onclick="nextQuestionOrTransition()">LANJUT ▶</button>
+                </div>
+                <img src="image/bnr.png" alt="Berhasil" class="modal-img-side">
+            </div>
+        </div>
+
+        <div id="modal-fail" class="modal-compact box-fail hidden">
+            <div class="modal-label text-red">GAGAL</div>
+            <div class="modal-row">
+                <div class="modal-row-text">
+                    <p class="modal-desc" id="fail-desc">Core terganggu!<br>Coba lagi!</p>
+                    <button class="modal-btn modal-btn-gray" onclick="closeModal()">COBA LAGI</button>
+                </div>
+                <img src="image/slh.png" alt="Salah" class="modal-img-side">
+            </div>
+        </div>
+
+        <div id="modal-transition" class="modal-box box-transition hidden">
+            <div class="victory-burst" id="victory-burst"></div>
+            <div class="door-container">
+                <img src="image/sukses.png" alt="Selesai" class="modal-img-door">
+            </div>
+            <div class="victory-badge">🏆 NEXUS LAB CLEARED</div>
+            <h2 class="modal-title text-gold mt-20">MASTER CORE<br>UNLOCKED</h2>
+            <p class="modal-desc">Luar biasa! Kamu berhasil menyelesaikan seluruh tantangan Nexus Escape Logic Lab!</p>
+            <div class="final-score-box">
+                <div class="final-score-label">SKOR AKHIR</div>
+                <div class="final-score-val" id="final-score-val">0</div>
+            </div>
+            <div class="transition-btn-group">
+                <button class="modal-btn modal-btn-gold" onclick="goToNextRoom()">🏠 KEMBALI KE LOBBY</button>
+            </div>
+        </div>
+
+        <div id="modal-gameover" class="modal-box box-gameover hidden">
+            <h2 class="modal-title text-red">SYSTEM FAILURE</h2>
+            <p class="modal-desc">Nyawa kamu habis.<br>MASTER CORE permanently locked.</p>
+            <div class="modal-icon">
+                <img src="image/ggl.png" alt="Game Over" class="modal-img">
+            </div>
+            <button class="modal-btn modal-btn-red mt-20" onclick="goToOpening()">↩ COBA LAGI</button>
+        </div>
+
+        <div id="modal-usekey" class="modal-box box-usekey hidden">
+            <div class="usekey-top">
+                <div class="usekey-icon">🏆</div>
+                <div class="usekey-key-count">FINAL</div>
+            </div>
+            <h2 class="modal-title text-gold" style="margin-bottom:12px">MASTER CORE TERBUKA!</h2>
+            <p class="usekey-narasi">
+                LUAR BIASA! Kamu berhasil menyelesaikan <strong>seluruh Nexus Escape Logic Lab</strong>.<br><br>
+                Nexus mengakui kamu sebagai <span class="text-gold">Master Engineer</span>.<br>
+                Semua sistem laboratorium kini terbuka!
+            </p>
+            <button class="modal-btn modal-btn-gold mt-20 usekey-btn" onclick="useKeyAndProceed()">
+                🏆 &nbsp;SELESAIKAN LAB
+            </button>
+        </div>
+
+        <div id="modal-settings" class="modal-box box-settings hidden">
+            <div class="settings-header">
+                <h2 class="modal-title text-gold" style="margin:0">⚙ SETTINGS</h2>
+                <button class="settings-close" onclick="closeSettings()">✕</button>
+            </div>
+            <div class="settings-section">
+                <div class="settings-label">🎵 Background Music</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-music" onclick="toggleMusic()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-music" min="0" max="100" value="40"
+                            oninput="setMusicVolume(this.value)" class="vol-slider">
+                        <span class="vol-value" id="vol-music-val">40</span>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-label">🔔 Efek Suara</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-sfx" onclick="toggleSfx()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-sfx" min="0" max="100" value="70" oninput="setSfxVolume(this.value)"
+                            class="vol-slider">
+                        <span class="vol-value" id="vol-sfx-val">70</span>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-label">🌐 Bahasa / Language</div>
+                <div class="settings-row lang-row">
+                    <button class="lang-btn active" id="lang-id" onclick="setLanguage('id')">🇮🇩 Indonesia</button>
+                    <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+                </div>
+            </div>
+            <button class="modal-btn modal-btn-gold mt-20" onclick="closeSettings()">SIMPAN & TUTUP</button>
+        </div>
+
+    </div>
+
+    <script src="master.js"></script>
+
+    <div id="page-transition" class="page-transition">
+        <div class="transition-content">
+            <div class="transition-glitch">LAB CLEARED</div>
+            <div class="transition-sub">KEMBALI KE LOBBY...</div>
+            <div class="transition-bar-wrap">
+                <div class="transition-bar-fill" id="transition-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

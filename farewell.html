@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Escape - Farewell Flow</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Orbitron:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="farewell.css">
+</head>
+<body>
+    <canvas id="particles"></canvas>
+    <div class="tech-grid-bg"></div>
+
+    <div id="scene-recovery" class="scene active visible">
+        <div class="recovery-box">
+            <div id="rec-step1" class="rec-step">
+                <div class="core-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/8066/8066270.png" alt="Core" style="width: 100px; filter: hue-rotate(150deg) drop-shadow(0 0 20px #4ade80);">
+                </div>
+                <h1 class="granted-text">ACCESS GRANTED</h1>
+                <p class="subtitle">MASTER PASSWORD ACCEPTED</p>
+            </div>
+
+            <div id="rec-step2" class="rec-step hidden">
+                <p class="system-text">SYSTEM RECOVERY IN PROGRESS...</p>
+                <div class="progress-wrap">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="progress-labels">
+                    <span>0%</span><span id="progress-val">0%</span><span>100%</span>
+                </div>
+            </div>
+
+            <div id="rec-step3" class="rec-step hidden">
+                <h1 class="restored-text">NEXUS SYSTEM<br><span>RESTORED</span></h1>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-dialog" class="scene">
+        <div class="scene-overlay dark"></div>
+        <div class="dialog-scene-wrap">
+            <div class="nexus-avatar-wrap">
+                <img src="https://cdn-icons-png.flaticon.com/512/8066/8066270.png" alt="Nexus" class="nexus-big-avatar" style="filter: drop-shadow(0 0 20px #00d4ff);">
+            </div>
+            <div class="dialog-scene-box futuristic-panel">
+                <div class="panel-header">4 &nbsp; FAREWELL DIALOGUE</div>
+                <div class="dialog-scene-title">NEXUS</div>
+                <div class="dialog-scene-text" id="dialog-scene-text"></div>
+                <button class="dialog-next-btn" id="dialog-next-btn" onclick="nextDialog()">LANJUT ▶</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="scene-walkout" class="scene">
+        <div class="scene-overlay darker"></div>
+        <div class="door-light">
+            <div class="doorway"></div>
+        </div>
+        <div class="walkout-wrap">
+            <div class="player-avatar-wrap" id="player-avatar-wrap">
+                <img id="player-avatar-img" src="https://cdn-icons-png.flaticon.com/512/10494/10494056.png" alt="Player" class="player-avatar-img silhouette">
+            </div>
+        </div>
+        <div class="panel-header top-center" id="walkout-caption">5 &nbsp; EXIT GATE OPENED</div>
+    </div>
+
+    <div id="scene-summary" class="scene">
+        <div class="scene-overlay darker"></div>
+        <div class="summary-container">
+            <div class="futuristic-panel gold-panel achievement-box">
+                <div class="panel-header gold-text">6 &nbsp; ACHIEVEMENT UNLOCKED</div>
+                <h3 class="gold-subtitle">ACHIEVEMENT UNLOCKED</h3>
+                <div class="badge-icon">⬢</div>
+                <h2 class="badge-title">MASTER ENGINEER</h2>
+                <p class="desc-text">Pencapaian spesial terbuka sebagai bukti keberhasilanmu.</p>
+            </div>
+
+            <div class="futuristic-panel stats-box">
+                <div class="panel-header">7 &nbsp; JOURNEY SUMMARY</div>
+                <h3 class="box-title">JOURNEY SUMMARY</h3>
+                <div class="stat-row"><span class="stat-label"><span class="icon green">⭐</span> TOTAL SCORE</span> <strong id="sum-score" class="stat-val">9.850</strong></div>
+                <div class="stat-row"><span class="stat-label"><span class="icon blue">🧩</span> PUZZLE SOLVED</span> <strong id="sum-rooms" class="stat-val">6 / 6</strong></div>
+                <div class="stat-row"><span class="stat-label"><span class="icon gray">⏱️</span> TIME USED</span> <strong class="stat-val">00:28:47</strong></div>
+                <div class="stat-row"><span class="stat-label"><span class="icon red">🎯</span> ACCURACY</span> <strong class="stat-val">98 %</strong></div>
+                <div class="stat-row"><span class="stat-label"><span class="icon orange">💡</span> HINT USED</span> <strong class="stat-val">2</strong></div>
+            </div>
+
+            <div class="futuristic-panel memory-box">
+                <div class="panel-header">8 &nbsp; HALL OF MEMORY</div>
+                <div class="memory-grid">
+                    <div class="mem-item"><div class="check">✔</div><span>BINARY ROOM</span></div>
+                    <div class="mem-item"><div class="check">✔</div><span>DECIMAL ROOM</span></div>
+                    <div class="mem-item"><div class="check">✔</div><span>OCTAL ROOM</span></div>
+                    <div class="mem-item"><div class="check">✔</div><span>HEXADECIMAL ROOM</span></div>
+                    <div class="mem-item"><div class="check">✔</div><span>LOGIC GATE ROOM</span></div>
+                    <div class="mem-item"><div class="check">✔</div><span>MASTER CORE</span></div>
+                </div>
+                <p class="desc-text mt-10">Semua ruangan yang telah diselesaikan akan ditampilkan sebagai kenangan.</p>
+            </div>
+        </div>
+        <button class="dialog-next-btn bottom-right" id="summary-next-btn" onclick="startScene5()">LANJUT ▶</button>
+    </div>
+
+    <div id="scene-goodbye" class="scene">
+        <div class="scene-overlay dark"></div>
+        <div class="dialog-scene-wrap" id="goodbye-wrap">
+            <div class="nexus-avatar-wrap">
+                <img src="https://cdn-icons-png.flaticon.com/512/8066/8066270.png" alt="Nexus" class="nexus-big-avatar hologram" id="nexus-hologram">
+            </div>
+            <div class="dialog-scene-box futuristic-panel" id="goodbye-box">
+                <div class="panel-header">9 &nbsp; FINAL GOODBYE</div>
+                <div class="dialog-scene-title">NEXUS</div>
+                <div class="dialog-scene-text" id="goodbye-text"></div>
+                <button class="dialog-next-btn" id="goodbye-btn" onclick="fadeRobot()">SELESAI ▶</button>
+            </div>
+        </div>
+        <div class="terminated-box hidden" id="term-text">
+            <div class="panel-header">10 &nbsp; ROBOT FADE OUT</div>
+            <h1 class="terminated-text">CONNECTION<br>TERMINATED</h1>
+        </div>
+    </div>
+
+    <div id="scene-cert" class="scene">
+        <div class="scene-overlay darker"></div>
+        <div class="final-dashboard">
+            <div class="futuristic-panel gold-panel cert-card" id="cert-card">
+                <div class="panel-header gold-text top-left-abs">11 &nbsp; CERTIFICATE REVEAL</div>
+                <div class="cert-body">
+                    <h2 class="cert-badge-title">MASTER ENGINEER</h2>
+                    <div class="cert-subtitle">SERTIFIKAT PENGHARGAAN</div>
+                    <div class="cert-given">DIBERIKAN KEPADA</div>
+                    <div class="cert-player-name hl-gold" id="cert-player-name">HEMAAAA</div>
+                    <p class="cert-desc">Telah berhasil menyelesaikan seluruh tantangan di NEXUS ESCAPE LOGIC LAB dan memulihkan sistem dari lockdown darurat.</p>
+                    <div class="cert-date hl-gold" id="cert-date">16 JUNI 2026</div>
+                    <div class="seal-icon">🥇</div>
+                </div>
+            </div>
+
+            <div class="right-panel-group">
+                <div class="futuristic-panel credits-box">
+                    <div class="panel-header">12 &nbsp; CREDITS</div>
+                    <h3 class="credits-title">NEXUS ESCAPE LOGIC LAB</h3>
+                    <p class="created-by">CREATED BY</p>
+                    <div class="roles-grid">
+                        <div class="role-col">
+                            <span class="icon">👨‍💻</span><br><span>PROGRAMMER</span>
+                        </div>
+                        <div class="role-col">
+                            <span class="icon">🎨</span><br><span>DESIGNER</span>
+                        </div>
+                        <div class="role-col">
+                            <span class="icon">📝</span><br><span>GAME WRITER</span>
+                        </div>
+                        <div class="role-col">
+                            <span class="icon">🔍</span><br><span>RESEARCHER</span>
+                        </div>
+                    </div>
+                    <p class="ty-text">THANK YOU FOR PLAYING! ✦</p>
+                </div>
+
+                <div class="futuristic-panel menu-box">
+                    <div class="panel-header">13 &nbsp; BACK TO MENU</div>
+                    <div class="menu-buttons-wrap">
+                        <div class="robot-small">
+                            <img src="https://cdn-icons-png.flaticon.com/512/8066/8066270.png" width="100" style="filter: drop-shadow(0 0 10px #00d4ff);">
+                        </div>
+                        <div class="btn-stack">
+                            <button class="menu-btn btn-blue" onclick="playAgain()">PLAY AGAIN</button>
+                            <button class="menu-btn btn-outline" onclick="window.location.href='lobby.html'">BACK TO LOBBY</button>
+                            <button class="menu-btn btn-red" onclick="window.close()">EXIT GAME</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-note">★ SETIAP MOMEN ADALAH BAGIAN DARI PERJALANANMU DI NEXUS LAB. TERIMA KASIH, OPERATOR! ★</div>
+    </div>
+
+    <button class="skip-btn" id="skip-btn" onclick="forceSkip()">SKIP TO END ⏭</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="farewell.js"></script>
+</body>
+</html>

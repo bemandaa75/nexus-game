@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexus Escape Logic Lab - Octal Room</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="octal.css">
+</head>
+
+<body>
+
+    <div class="game-container">
+        <header>
+            <div class="lives" id="lives-display"></div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-icon">⏱️</span>
+                    <span id="timer">10:00</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">⭐</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">📋</span>
+                    <span id="question-counter">1/10</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button title="Restart" onclick="restartGame()">↻</button>
+                <button title="Settings" onclick="openSettings()">⚙</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <div class="dialog-box">
+                    <div class="dialog-title">NEXUS:</div>
+                    <div class="dialog-text" id="nexus-dialog">Octal system detected. Convert the code to continue.
+                    </div>
+                </div>
+                <img src="image/rbtoctal.png" alt="Nexus Robot" class="robot-img">
+            </div>
+
+            <div class="center-panel">
+                <div class="question" id="question-display"></div>
+                <div class="answer-box" id="answer-display">_Jawaban di sini</div>
+                <div class="hint-display" id="hint-display"></div>
+                <div class="numpad">
+                    <button onclick="inputNumber('0')">0</button>
+                    <button onclick="inputNumber('1')">1</button>
+                    <button onclick="inputNumber('2')">2</button>
+                    <button onclick="inputNumber('3')">3</button>
+                    <button onclick="inputNumber('4')">4</button>
+                    <button onclick="inputNumber('5')">5</button>
+                    <button onclick="inputNumber('6')">6</button>
+                    <button onclick="inputNumber('7')">7</button>
+                    <button onclick="inputNumber('8')">8</button>
+                    <button onclick="inputNumber('9')">9</button>
+                    <button onclick="inputNumber('A')">A</button>
+                    <button onclick="inputNumber('B')">B</button>
+                    <button onclick="inputNumber('C')">C</button>
+                    <button onclick="inputNumber('D')">D</button>
+                    <button onclick="inputNumber('E')">E</button>
+                    <button onclick="inputNumber('F')">F</button>
+                </div>
+            </div>
+
+            <div class="right-panel">
+                <button class="action-btn btn-submit" onclick="checkAnswer()">SUBMIT</button>
+                <button class="action-btn btn-hint" id="hint-btn" onclick="useHint()">HINT (<span
+                        id="hint-count">3</span>)</button>
+                <button class="action-btn btn-secondary" onclick="backspaceAnswer()">⌫ BACKSPACE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Opening Overlay -->
+    <div id="opening-screen" class="opening-screen">
+        <div class="opening-content">
+            <div class="opening-room-label">OCTAL ROOM</div>
+            <div class="opening-title">OCTAL<br>CHALLENGE<br>STATION</div>
+            <div class="opening-sub">Sistem Octal terdeteksi — Konversikan kode untuk melanjutkan</div>
+            <button class="opening-btn" onclick="startGame()">▶ &nbsp;MULAI</button>
+        </div>
+    </div>
+
+    <!-- MODALS -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+
+        <div id="modal-success" class="modal-compact box-success hidden">
+            <div class="modal-label text-green">BERHASIL</div>
+            <div class="modal-row">
+                <div class="modal-row-text">
+                    <p class="modal-desc">Good job!<br>Kamu mendapatkan Digital Key!</p>
+                    <div class="score-gain" id="score-gain-text">+200 poin</div>
+                    <button class="modal-btn modal-btn-green" onclick="nextQuestionOrTransition()">LANJUT ▶</button>
+                </div>
+                <img src="image/bnr.png" alt="Berhasil" class="modal-img-side">
+            </div>
+        </div>
+
+        <div id="modal-fail" class="modal-compact box-fail hidden">
+            <div class="modal-label text-red">GAGAL</div>
+            <div class="modal-row">
+                <div class="modal-row-text">
+                    <p class="modal-desc" id="fail-desc">Incorrect input detected.<br>Coba lagi!</p>
+                    <button class="modal-btn modal-btn-gray" onclick="closeModal()">COBA LAGI</button>
+                </div>
+                <img src="image/slh.png" alt="Salah" class="modal-img-side">
+            </div>
+        </div>
+
+        <div id="modal-transition" class="modal-box box-transition hidden">
+            <div class="door-container">
+                <img src="image/sukses.png" alt="Pintu Terbuka" class="modal-img-door">
+            </div>
+            <h2 class="modal-title text-cyan mt-20">ACCESS GRANTED</h2>
+            <p class="modal-desc">Pintu terbuka ke stage berikutnya...</p>
+            <div class="transition-btn-group">
+                <button class="modal-btn modal-btn-cyan" onclick="goToNextRoom()">LANJUT KE HEXA ROOM ▶</button>
+                <button class="modal-btn modal-btn-outline" onclick="goToOpening()">↩ KEMBALI KE LOBBY</button>
+            </div>
+        </div>
+
+        <div id="modal-gameover" class="modal-box box-gameover hidden">
+            <h2 class="modal-title text-red">SYSTEM FAILURE</h2>
+            <p class="modal-desc">Nyawa kamu habis.<br>Laboratory permanently locked.</p>
+            <div class="modal-icon">
+                <img src="image/ggl.png" alt="Game Over" class="modal-img">
+            </div>
+            <button class="modal-btn modal-btn-red mt-20" onclick="goToOpening()">KEMBALI KE LOBBY</button>
+        </div>
+
+        <!-- Use Key Modal -->
+        <div id="modal-usekey" class="modal-box box-usekey hidden">
+            <div class="usekey-top">
+                <div class="usekey-icon">🗝️</div>
+                <div class="usekey-key-count">
+                    x<span id="usekey-count">1</span>
+                </div>
+            </div>
+            <h2 class="modal-title text-cyan" style="margin-bottom:12px">KUNCI DITEMUKAN!</h2>
+            <p class="usekey-narasi">
+                Selamat! Kamu berhasil menyelesaikan <strong>Octal Room</strong>.<br><br>
+                Nexus mendeteksi sebuah <span class="text-cyan">Digital Key</span> di sakumu.<br>
+                Gunakan kunci ini untuk membuka pintu ke <strong>Hexa Room</strong>.
+            </p>
+            <button class="modal-btn modal-btn-cyan mt-20 usekey-btn" onclick="useKeyAndProceed()">
+                🗝️ &nbsp;GUNAKAN KUNCI
+            </button>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="modal-settings" class="modal-box box-settings hidden">
+            <div class="settings-header">
+                <h2 class="modal-title text-cyan" style="margin:0">⚙ SETTINGS</h2>
+                <button class="settings-close" onclick="closeSettings()">✕</button>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🎵 Background Music</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-music" onclick="toggleMusic()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-music" min="0" max="100" value="40"
+                            oninput="setMusicVolume(this.value)" class="vol-slider">
+                        <span class="vol-value" id="vol-music-val">40</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🔔 Efek Suara</div>
+                <div class="settings-row">
+                    <button class="toggle-btn" id="toggle-sfx" onclick="toggleSfx()">ON</button>
+                    <div class="volume-wrap">
+                        <span class="vol-icon">🔊</span>
+                        <input type="range" id="vol-sfx" min="0" max="100" value="70" oninput="setSfxVolume(this.value)"
+                            class="vol-slider">
+                        <span class="vol-value" id="vol-sfx-val">70</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <div class="settings-label">🌐 Bahasa / Language</div>
+                <div class="settings-row lang-row">
+                    <button class="lang-btn active" id="lang-id" onclick="setLanguage('id')">🇮🇩 Indonesia</button>
+                    <button class="lang-btn" id="lang-en" onclick="setLanguage('en')">🇬🇧 English</button>
+                </div>
+            </div>
+
+            <button class="modal-btn modal-btn-cyan mt-20" onclick="closeSettings()">SIMPAN & TUTUP</button>
+        </div>
+
+    </div>
+
+    <script src="octal.js"></script>
+
+    <!-- Cinematic Transition Overlay -->
+    <div id="page-transition" class="page-transition">
+        <div class="transition-content">
+            <div class="transition-glitch">ACCESS GRANTED</div>
+            <div class="transition-sub">LOADING HEXA ROOM...</div>
+            <div class="transition-bar-wrap">
+                <div class="transition-bar-fill" id="transition-bar-fill"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

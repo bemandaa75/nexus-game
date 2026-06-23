@@ -1,0 +1,489 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Rajdhani:wght@400;600;700&display=swap');
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Rajdhani', sans-serif;
+    background: #06031a;
+}
+
+/* ── BG ── */
+#bg-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image: url('image/bgtutorial.png');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.55) saturate(1.1);
+}
+
+#bg-layer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(4, 2, 20, 0.5);
+}
+
+#particles {
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+}
+
+#scanlines {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 4px);
+}
+
+/* ── Corners ── */
+.corner {
+    position: fixed;
+    width: 26px;
+    height: 26px;
+    z-index: 9;
+}
+
+.corner::before,
+.corner::after {
+    content: '';
+    position: absolute;
+    background: #4ecfff;
+}
+
+.corner::before {
+    width: 100%;
+    height: 2px;
+    top: 0;
+    left: 0;
+}
+
+.corner::after {
+    width: 2px;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.corner.tl {
+    top: 14px;
+    left: 14px;
+}
+
+.corner.tr {
+    top: 14px;
+    right: 14px;
+    transform: scaleX(-1);
+}
+
+.corner.bl {
+    bottom: 14px;
+    left: 14px;
+    transform: scaleY(-1);
+}
+
+.corner.br {
+    bottom: 14px;
+    right: 14px;
+    transform: scale(-1);
+}
+
+/* ── Fade overlay ── */
+#t-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: #000;
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity .55s ease;
+}
+
+/* ════════════════════
+   PAGE WRAP
+   ════════════════════ */
+#page-wrap {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+/* ── Step badge ── */
+#step-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    margin-left: clamp(0px, 1vw, 16px);
+}
+
+.badge-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 7px;
+    background: rgba(0, 80, 140, 0.6);
+    border: 1.5px solid #4ecfff;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 14px;
+    color: #4ecfff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-txt {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(11px, 1.6vw, 16px);
+    letter-spacing: .1em;
+    color: #d0eeff;
+    text-transform: uppercase;
+}
+
+/* ════════════════════
+   PANEL UTAMA
+   ════════════════════ */
+#tut-panel {
+    background: rgba(8, 14, 50, 0.9);
+    border: 2px solid rgba(78, 207, 255, 0.38);
+    border-radius: 16px;
+    padding: 22px 22px 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    width: min(1000px, 96vw);
+    margin: 20px auto;
+    box-shadow: 0 0 0 1px rgba(0, 180, 220, 0.08), inset 0 0 30px rgba(0, 0, 0, 0.45);
+    animation: panel-in .5s .1s cubic-bezier(.22, 1, .36, 1) both;
+}
+
+@keyframes panel-in {
+    from {
+        opacity: 0;
+        transform: translateY(16px)
+    }
+
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+
+#tut-heading {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: clamp(15px, 2.8vw, 22px);
+    letter-spacing: .25em;
+    text-transform: uppercase;
+    color: #e0f0ff;
+    text-shadow: 0 0 10px rgba(78, 207, 255, 0.25);
+}
+
+/* ════════════════════
+   CARDS ROW
+   ════════════════════ */
+#cards-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    width: 100%;
+}
+
+/* Panah flow */
+.flow-arrow {
+    color: #4ecfff;
+    font-size: clamp(14px, 2vw, 20px);
+    flex-shrink: 0;
+    margin-top: 30px;
+    filter: drop-shadow(0 0 4px rgba(78, 207, 255, 0.7));
+    animation: arr-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes arr-pulse {
+
+    0%,
+    100% {
+        opacity: .55
+    }
+
+    50% {
+        opacity: 1
+    }
+}
+
+/* ── Card ── */
+.tut-card {
+    flex: 1;
+    min-width: 0;
+    background: rgba(20, 16, 60, 0.82);
+    border: 2px solid rgba(100, 80, 180, 0.3);
+    border-radius: 12px;
+    padding: 12px 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: border-color .22s, box-shadow .22s, transform .18s;
+}
+
+.tut-card:hover {
+    transform: translateY(-2px);
+}
+
+.tut-card.active {
+    border-color: rgba(160, 80, 255, 0.8);
+    box-shadow: 0 0 18px rgba(140, 60, 240, 0.3), inset 0 0 10px rgba(100, 40, 180, 0.15);
+    background: rgba(30, 16, 80, 0.9);
+}
+
+.tut-card:last-of-type.active {
+    border-color: rgba(78, 207, 255, 0.8);
+    box-shadow: 0 0 16px rgba(0, 200, 240, 0.25);
+}
+
+/* Icon */
+.card-icon-wrap {
+    width: clamp(44px, 7vw, 58px);
+    height: clamp(44px, 7vw, 58px);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px;
+}
+
+.ci-purple {
+    background: rgba(100, 40, 180, 0.5);
+    border: 1.5px solid rgba(180, 100, 255, 0.45);
+}
+
+.ci-dark {
+    background: rgba(20, 30, 60, 0.65);
+    border: 1.5px solid rgba(100, 130, 180, 0.3);
+}
+
+.ci-cyan {
+    background: rgba(0, 40, 80, 0.6);
+    border: 1.5px solid rgba(78, 207, 255, 0.45);
+}
+
+.card-icon-wrap svg {
+    width: 100%;
+    height: 100%;
+}
+
+/* Label */
+.card-lbl {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(10px, 1.4vw, 13px);
+    line-height: 1.35;
+    text-align: center;
+    color: #ccdde8;
+}
+
+/* Penjelasan / deskripsi di bawah label */
+.card-desc {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 600;
+    font-size: clamp(9px, 1.15vw, 11px);
+    line-height: 1.5;
+    text-align: center;
+    color: rgba(160, 195, 215, 0.72);
+    padding: 0 2px;
+}
+
+/* ════════════════════
+   BOTTOM ROW: robot + bar
+   ════════════════════ */
+#bottom-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    width: 100%;
+}
+
+/* ── Robot BESAR ── */
+#robot-wrap {
+    flex-shrink: 0;
+    width: clamp(110px, 18vw, 160px);
+    position: relative;
+    bottom: -4px;
+}
+
+#robot-img {
+    width: 100%;
+    display: block;
+    filter: drop-shadow(0 0 10px rgba(0, 200, 240, 0.45)) drop-shadow(0 0 24px rgba(140, 80, 255, 0.3));
+    animation: robot-float 3.5s ease-in-out infinite;
+}
+
+@keyframes robot-float {
+
+    0%,
+    100% {
+        transform: translateY(0)
+    }
+
+    50% {
+        transform: translateY(-7px)
+    }
+}
+
+/* ── Bar section ── */
+#bar-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+/* Loading bar — SAMA PERSIS dengan splash screen */
+#bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#bar-track {
+    flex: 1;
+    height: 22px;
+    background: #050e1f;
+    border: 2px solid #1a6a9a;
+    border-radius: 3px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(0, 180, 255, .18), inset 0 0 10px rgba(0, 0, 0, .55);
+}
+
+/* Grid vertikal sama splash */
+#bar-track::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: repeating-linear-gradient(90deg, rgba(30, 100, 160, .18) 0, rgba(30, 100, 160, .18) 1px, transparent 1px, transparent 9px);
+}
+
+#bar-fill {
+    height: 100%;
+    width: 0%;
+    position: relative;
+    z-index: 1;
+    background: linear-gradient(90deg,
+            #0a3a6e 0%, #1070b8 25%, #18a8e0 55%, #60d8f8 80%, #c8f0ff 95%, #fff 100%);
+    border-radius: 1px;
+    transition: width .1s linear;
+    box-shadow: 0 0 8px rgba(0, 200, 255, .6);
+}
+
+#bar-fill::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 12px;
+    background: linear-gradient(90deg, transparent, #fff);
+    border-radius: 0 1px 1px 0;
+}
+
+#bar-pct {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(11px, 1.6vw, 14px);
+    color: #6dd8f0;
+    white-space: nowrap;
+}
+
+#bar-label {
+    font-family: 'Rajdhani', sans-serif;
+    font-weight: 700;
+    font-size: clamp(9px, 1.2vw, 11px);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: rgba(160, 200, 220, .65);
+    text-align: center;
+}
+
+/* ── Tombol: SKIP + START GAME (tidak ada NEXT) ── */
+#btn-row {
+    display: flex;
+    gap: 12px;
+}
+
+#btn-row button {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: clamp(10px, 1.4vw, 13px);
+    letter-spacing: .1em;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    cursor: pointer;
+    flex: 1;
+    transition: transform .15s, box-shadow .15s;
+}
+
+#btn-row button:active {
+    transform: scale(.97);
+}
+
+#btnSkip {
+    background: rgba(0, 10, 40, 0.65);
+    border: 1.5px solid rgba(78, 207, 255, 0.4) !important;
+    color: #7ee8f0;
+}
+
+#btnSkip:hover {
+    background: rgba(0, 50, 90, 0.4);
+}
+
+.btn-start {
+    background: linear-gradient(135deg, #0ea5e9, #06b6d4);
+    border: 1.5px solid #4ecfff !important;
+    color: #fff;
+    font-size: clamp(12px, 1.6vw, 15px);
+    box-shadow: 0 0 10px rgba(0, 200, 240, 0.35);
+    letter-spacing: .08em;
+}
+
+.btn-start:hover {
+    background: linear-gradient(135deg, #38bdf8, #22d3ee);
+    box-shadow: 0 0 20px rgba(0, 220, 255, 0.5);
+    transform: translateY(-1px);
+}
+
+/* Caption */
+#caption {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: clamp(11px, 1.5vw, 14px);
+    color: rgba(160, 200, 220, .55);
+    text-align: center;
+}
