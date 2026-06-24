@@ -1,0 +1,24 @@
+/* Paksa landscape di HP */
+@media screen and (orientation: portrait) {
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: #05030e;
+    z-index: 9999;
+  }
+  body::after {
+    content: '🔄 Putar HP ke mode Landscape';
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 20px;
+    color: #00e5ff;
+    text-align: center;
+    background: #05030e;
+  }
+}
